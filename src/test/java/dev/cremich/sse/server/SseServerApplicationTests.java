@@ -1,16 +1,26 @@
 package dev.cremich.sse.server;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(SpringRunner.class)
+import dev.cremich.sse.server.eventstream.web.rest.DataStreamController;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class SseServerApplicationTests {
+class SseServerApplicationTests {
+
+  @Autowired
+  DataStreamController controller;
 
   @Test
-  public void contextLoads() {
+  @DisplayName("Spring context is loaded")
+  void contextLoads() {
+    assertNotNull(controller);
   }
 
 }

@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import dev.cremich.sse.server.eventstream.repository.DataStream;
 import dev.cremich.sse.server.eventstream.repository.InMemoryDataStreamRepository;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -65,7 +66,7 @@ class DataStreamControllerIntegrationTest {
 
   @Test
   @DisplayName("Receive server sent events via http client")
-  void getEventStream() throws Exception {
+  void getEventStream() throws IOException, InterruptedException {
     DataStream dataStream = DataStream.create();
     repository.add(dataStream);
 

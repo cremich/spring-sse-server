@@ -20,7 +20,7 @@ class CountEventListener {
       SseEventBuilder event = SseEmitter.event()
           .data(countEvent.getNewCount())
           //.id()
-          .name("server sent count event");
+          .name("count");
 
       try {
         emitter.send(event);

@@ -54,15 +54,8 @@ export default {
         console.log(e);
       };
     },
-    raiseCount: function() {
-      axios
-        .post(`/counters/increaseOrder`)
-        .then(response => {
-          console.log(response.data)
-        })
-        .catch(e => {
-          console.log(e);
-        });
+    raiseCount: async function() {
+      axios.post(`/counters/increaseOrder`);
     }
   }
 };

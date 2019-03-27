@@ -30,8 +30,6 @@ describe("Counter.vue", () => {
     expect(axios.post).toBeCalledWith("/streams");
     wrapper.vm.$nextTick(() => {
       expect(wrapper.vm.streamId).toBe(1);
-      done();
-    })
-
+    });
   });
 });

@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import dev.cremich.sse.server.counter.CounterService;
 import dev.cremich.sse.server.eventstream.repository.DataStream;
 import dev.cremich.sse.server.eventstream.repository.InMemoryDataStreamRepository;
 import java.io.IOException;
@@ -15,8 +16,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.time.Duration;
-import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,6 +44,9 @@ class DataStreamControllerIntegrationTest {
   @Autowired
   InMemoryDataStreamRepository repository;
 
+  @Autowired
+  CounterService service;
+
   private MockMvc restMvc;
 
   @BeforeEach
@@ -67,22 +69,24 @@ class DataStreamControllerIntegrationTest {
   @Test
   @DisplayName("Receive server sent events via http client")
   void getEventStream() throws IOException, InterruptedException {
-    DataStream dataStream = DataStream.create();
+    var dataStream = DataStream.create();
     repository.add(dataStream);
 
-    HttpRequest request = HttpRequest.newBuilder()
+    var request = HttpRequest.newBuilder()
         .uri(URI.create("http://localhost:" + port + "/streams/" + dataStream.getId().toString() + "/data"))
-        .timeout(Duration.ofMinutes(1))
         .header("Content-Type", "text/event-stream")
         .GET()
         .build();
 
     HttpClient client = HttpClient.newHttpClient();
     HttpResponse<Stream<String>> response = client.send(request, BodyHandlers.ofLines());
-    final Optional<String> firstServerSentEvent = response.body().findFirst();
+
+    service.increaseCount();
+
+    var firstServerSentEvent = response.body().findFirst();
 
     assertFalse(firstServerSentEvent.isEmpty());
-    assertTrue(firstServerSentEvent.get().contains("data:2"));
+    assertTrue(firstServerSentEvent.get().contains("data:1"));
     assertEquals(200, response.statusCode());
   }
 }

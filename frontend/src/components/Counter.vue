@@ -1,6 +1,9 @@
 <template>
-  <div class="count">
-    <h1>{{ count }}</h1>
+  <div class="count" v-on:click="raiseCount">
+    <div class="count-container">
+      <h1>{{ count }}</h1>
+      <label>Touch or click to raise the count</label>
+    </div>
   </div>
 </template>
 
@@ -26,10 +29,11 @@ export default {
       });
     },
     createStream: function() {
+      var self = this;
       return axios
         .post(`/streams`)
         .then(response => {
-          this.streamId = response.data.id;
+          self.streamId = response.data.id;
         })
         .catch(e => {
           console.log(e);
@@ -47,20 +51,18 @@ export default {
       );
 
       this.eventSource.onerror = function(e) {
-        if (e.readyState == EventSource.CLOSED) {
-          console.log('event stream closed');
-        } else {
-          console.log(e);
-        }
+        console.log(e);
       };
-    }
-  },
-  watch: {
-    // whenever question changes, this function will run
-    streamId: function(newStreamId) {
-      if (newStreamId === 0) {
-        this.registerEventSource();
-      }
+    },
+    raiseCount: function() {
+      axios
+        .post(`/counters/increaseOrder`)
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(e => {
+          console.log(e);
+        });
     }
   }
 };
@@ -73,7 +75,6 @@ export default {
   width: 100%;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-  -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;

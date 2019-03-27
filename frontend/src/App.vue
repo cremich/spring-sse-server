@@ -28,6 +28,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   height: 100%;
-  color: #2c3e50;
+  color: #eceff1;
 }
 </style>

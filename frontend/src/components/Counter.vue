@@ -23,21 +23,13 @@ export default {
     this.registerEventSource();
   },
   methods: {
-    registerEventSource: function() {
-      this.createStream().then(() => {
-        this.addEventListener();
-      });
+    registerEventSource: async function() {
+      await this.createStream();
+      this.addEventListener();
     },
-    createStream: function() {
-      var self = this;
-      return axios
-        .post(`/streams`)
-        .then(response => {
-          self.streamId = response.data.id;
-        })
-        .catch(e => {
-          console.log(e);
-        });
+    createStream: async function() {
+      const response = await axios.post(`/streams`);
+      this.streamId = response.data.id;
     },
     addEventListener: function() {
       let self = this;

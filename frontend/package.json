@@ -31,7 +31,7 @@
     "vue-template-compiler": "^2.5.21"
   },
   "lint-staged": {
-    "{,src/**/}*.{md,json,ts,css,scss,yml}": [
+    "{,src/**/}*.{md,json,ts,css,scss,yml,vue}": [
       "prettier --write",
       "git add"
     ]

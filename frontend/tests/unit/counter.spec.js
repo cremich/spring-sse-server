@@ -1,10 +1,10 @@
 import { shallowMount } from "@vue/test-utils";
 import Counter from "@/components/Counter.vue";
-import axios from 'axios';
+import axios from "axios";
 
-jest.mock('axios', () => ({
-  post: jest.fn(() => Promise.resolve({data: {id: 1 } })),
-  get: jest.fn(() => Promise.resolve({ }))
+jest.mock("axios", () => ({
+  post: jest.fn(() => Promise.resolve({ data: { id: 1 } })),
+  get: jest.fn(() => Promise.resolve({}))
 }));
 
 describe("Counter.vue", () => {
@@ -21,7 +21,7 @@ describe("Counter.vue", () => {
 
   it("counters/increaseOrder is called onRaiseCount", () => {
     const wrapper = shallowMount(Counter);
-    wrapper.find("div.count").trigger('click');
+    wrapper.find("div.count").trigger("click");
     expect(axios.post).toBeCalledWith("/counters/increaseOrder");
   });
 

@@ -16,7 +16,7 @@ export default {
     return {
       count: 0,
       streamId: 0,
-      eventSource: null,
+      eventSource: null
     };
   },
   beforeMount() {

@@ -12,7 +12,8 @@ export default {
   data() {
     return {
       count: 0,
-      streamId: 0
+      streamId: 0,
+      eventSource: null,
     };
   },
   beforeMount() {
@@ -36,16 +37,21 @@ export default {
     },
     addEventListener: function() {
       let self = this;
-      let source = new EventSource("/streams/" + this.streamId + "/data");
-      source.addEventListener(
+      this.eventSource = new EventSource("/streams/" + this.streamId + "/data");
+      this.eventSource.addEventListener(
         "count",
         function(e) {
           self.count = e.data;
         },
         false
       );
-      source.onerror = function() {
-        self.streamId = 0;
+
+      this.eventSource.onerror = function(e) {
+        if (e.readyState == EventSource.CLOSED) {
+          console.log('event stream closed');
+        } else {
+          console.log(e);
+        }
       };
     }
   },
@@ -63,15 +69,28 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .count {
-  display: flex;
   height: 100%;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.count-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 50%;
+  height: 50%;
 }
 h1 {
   margin: 0;
   font-size: 13rem;
-  color: #eceff1;
 }
 label {
   font-size: 1.5rem;

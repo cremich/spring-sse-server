@@ -1,2 +1,14 @@
 language: java
 jdk: openjdk11
+
+# skip the installation step entirely by adding:
+install: true
+
+script: ./mvnw clean install
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+cache:
+  directories:
+    - $HOME/.m2

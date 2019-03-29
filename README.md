@@ -1,12 +1,13 @@
 # Spring MVC Streaming and SSE Request Processing
+[![Build Status](https://travis-ci.org/cremich/spring-sse-server.svg?branch=master)](https://travis-ci.org/cremich/spring-sse-server)
+[![codecov](https://codecov.io/gh/cremich/spring-sse-server/branch/master/graph/badge.svg)](https://codecov.io/gh/cremich/spring-sse-server)
+
 A [Server-Sent-Event](https://streamdata.io/blog/server-sent-events/) implementation based on the SseEmitter from 
 Spring. The server provides a rest api to create a new event stream and subscribe to the event data.
 
 ## Prerequisites
 * JDK 11
 * Maven 3.6.0
-* Node.js v10.15.2
-* npm > 6.4.1
 
 Currently there are not many prerequisites to run this sample. Please ensure you have a JDK 11 installed. Maven is installed via
 the `mvnw` maven-wrapper. Node.js and npm are installed via the `frontend-maven-plugin` during the [local installation](#local-installation).   

@@ -8,10 +8,13 @@
 </template>
 
 <script>
-import axios from "axios";
+import counterClient from "../api/counter/client";
+import streamClient from "../api/stream/client";
+import eventListenerMixin from "../mixins/eventListener";
 
 export default {
   name: "Counter",
+  mixins: [eventListenerMixin],
   data() {
     return {
       count: 0,
@@ -28,26 +31,11 @@ export default {
       this.addEventListener();
     },
     createStream: async function() {
-      const response = await axios.post(`/streams`);
+      const response = await streamClient.createStream();
       this.streamId = response.data.id;
     },
-    addEventListener: function() {
-      let self = this;
-      this.eventSource = new EventSource("/streams/" + this.streamId + "/data");
-      this.eventSource.addEventListener(
-        "count",
-        function(e) {
-          self.count = e.data;
-        },
-        false
-      );
-
-      this.eventSource.onerror = function(e) {
-        console.log(e);
-      };
-    },
     raiseCount: async function() {
-      axios.post(`/counters/increaseOrder`);
+      counterClient.increaseCount();
     }
   }
 };

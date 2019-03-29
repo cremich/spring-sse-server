@@ -1,35 +1,41 @@
-import { shallowMount } from "@vue/test-utils";
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Counter from "@/components/Counter.vue";
-import axios from "axios";
+import counterClient from "../../src/api/counter/client";
+import flushPromises from 'flush-promises'
 
-jest.mock("axios", () => ({
-  post: jest.fn(() => Promise.resolve({ data: { id: 1 } })),
-  get: jest.fn(() => Promise.resolve({}))
-}));
+jest.mock('../../src/api/counter/client');
+jest.mock('../../src/api/stream/client');
+
+let mockedMixin = {
+  methods: {
+    addEventListener() {
+    }
+  }
+};
 
 describe("Counter.vue", () => {
   it("counter is initialized with 0", () => {
-    const wrapper = shallowMount(Counter);
+    const wrapper = shallowMount(Counter,{mixins: [mockedMixin]});
     expect(wrapper.text()).toMatch("0");
   });
 
   it("counter is update when new count is set", () => {
-    const wrapper = shallowMount(Counter);
+    const wrapper = shallowMount(Counter,{mixins: [mockedMixin]});
     wrapper.setData({ count: 1 });
     expect(wrapper.text()).toMatch("1");
   });
 
   it("counters/increaseOrder is called onRaiseCount", () => {
-    const wrapper = shallowMount(Counter);
+    const wrapper = shallowMount(Counter,{mixins: [mockedMixin]});
     wrapper.find("div.count").trigger("click");
-    expect(axios.post).toBeCalledWith("/counters/increaseOrder");
+    expect(counterClient.increaseCount).toBeCalled();
   });
 
-  it("stream is created before component is mount", () => {
-    const wrapper = shallowMount(Counter);
-    expect(axios.post).toBeCalledWith("/streams");
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.streamId).toBe(1);
-    });
+  it("stream is created before component is mount", async () => {
+    const localVue = createLocalVue();
+    localVue.mixin(mockedMixin);
+    const wrapper = shallowMount(Counter,{mixins: [mockedMixin]});
+    await flushPromises();
+    expect(wrapper.vm.streamId).toBe(1);
   });
 });

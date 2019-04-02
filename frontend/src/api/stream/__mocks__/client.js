@@ -1,4 +1,4 @@
-const client = jest.genMockFromModule('../client.js');
+const client = jest.genMockFromModule("../client.js");
 
 client.createStream = () => ({
   data: {

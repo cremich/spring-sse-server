@@ -4,7 +4,6 @@ const resourcePath = "/counters";
 
 export default {
   async increaseCount() {
-    return axios.post(resourcePath + "/increaseOrder")
+    return axios.post(resourcePath + "/increaseOrder");
   }
-}
-
+};
